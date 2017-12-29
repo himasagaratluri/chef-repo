@@ -8,16 +8,16 @@ include_recipe 'apt'
 
 package 'nginx' do
  action :install
-end
-
-#execute 'nginx_service_enable' do
- # command 'sudo /etc/init.d/nginx start'
-  #user 'sudo'
-  #action :run
-#end 
+end 
 
 service 'nginx' do
- supports :enable => true, :start => true
+ supports :enable => true, :start => true, :reload => true
  action [ :enable, :start ]
+end
+
+cookbook_file "/usr/share/nginx/html/index.html" do
+ source "index.html"
+ mode "0644"
+notifies :reload, "service[nginx]"
 end
 
